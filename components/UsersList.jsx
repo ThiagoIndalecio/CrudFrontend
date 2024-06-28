@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Modal from './ModalUpdateUser';
-import DeleteModal from './DeleteModal';
+import Modal from './ModalUpdateUser.jsx';
+import DeleteModal from './DeleteModal.jsx';
 
-export default function ListUsers() {
+export default function ListClients() {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -12,21 +12,25 @@ export default function ListUsers() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchClients = async () => {
             try {
+                
                 const response = await axios.get('http://localhost:3000/api/user/list');
-                setUsers(response.data.users); 
+                console.log(response.data.users)
+                setUsers(response.data.users);
                 setLoading(false);
             } catch (err) {
-                setError('Erro ao carregar usuários.');
+                setError('Erro ao carregar usuarios.');
                 setLoading(false);
             }
+          
         };
-
-        fetchUsers();
+        
+        fetchClients();
     }, []);
 
     const handleModalShow = (user) => {
+        console.log(user)
         setSelectedUser(user);
         setShowModal(true);
     };
@@ -47,15 +51,15 @@ export default function ListUsers() {
     };
 
     const handleDeleteConfirm = async () => {
+        
         try {
-            
-            await axios.put('http://localhost:3000/api/user/delete', {
-                id: selectedUser.id
+            await axios.post(`http://localhost:3000/api/user/deleteRegister`, {
+                id: selectedUser.id 
             });
-            setUsers(users.filter(user => user.id !== selectedUser.id));
+            //setClients(clients.filter(client => client.id !== selectedClient.id));
             setShowDeleteModal(false);
         } catch (error) {
-            console.error('Erro ao deletar usuário:', error);
+            console.error('Erro ao deletar cliente:', error);
         }
     };
 
@@ -66,7 +70,7 @@ export default function ListUsers() {
     if (error) {
         return <div>{error}</div>;
     }
-    console.log(users)
+
     return (
         <div className="flex justify-center w-full">
             <div className="w-full max-w-4xl">
@@ -77,20 +81,19 @@ export default function ListUsers() {
                             <tr>
                                 <th className="px-6 py-3">Nome</th>
                                 <th className="px-6 py-3">Email</th>
-                                <th className="px-6 py-3">Admin</th>
                                 <th className="px-6 py-3">Status</th>
+                                <th className="px-6 py-3">Admin</th>
                                 <th className="px-6 py-3">Alterar</th>
                                 <th className="px-6 py-3">Excluir</th>
                             </tr>
                         </thead>
                         <tbody>
                             {users.map((user) => (
-                                
                                 <tr key={user.id} className="odd:bg-slate-200 even:bg-gray-50 border-b">
                                     <td className="px-6 py-4">{user.name}</td>
                                     <td className="px-6 py-4">{user.email}</td>
-                                    <td className="px-6 py-4">{user.is_admin ? 'Sim' : 'Não'}</td>
                                     <td className="px-6 py-4">{user.status ? 'Ativo' : 'Inativo'}</td>
+                                    <td className="px-6 py-4">{user.is_admin ? 'Sim' : 'Não'}</td>
                                     <td className="px-6 py-4">
                                         <button
                                             onClick={() => handleModalShow(user)}
@@ -114,10 +117,12 @@ export default function ListUsers() {
             {showModal && (
                 <Modal
                     initialValues={{
-                        name: selectedUser?.name || "",
-                        email: selectedUser?.email || "",
-                        admin: selectedUser?.admin || "",
-                        status: selectedUser?.status || false
+                        userName: selectedUser?.name || "",
+                        userEmail: selectedUser?.email || "",
+                        userSenha: selectedUser?.password || "",
+                        userStatus: selectedUser?.status || false,
+                        userAdmin: selectedUser?.is_admin || false
+
                     }}
                     closeModal={handleModalClose}
                     userData={selectedUser}
@@ -125,7 +130,7 @@ export default function ListUsers() {
             )}
             {showDeleteModal && (
                 <DeleteModal
-                    userData={selectedUser}
+                    
                     closeModal={handleDeleteModalClose}
                     confirmDelete={handleDeleteConfirm}
                 />

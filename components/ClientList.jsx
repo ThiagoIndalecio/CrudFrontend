@@ -23,7 +23,7 @@ export default function ListClients() {
                 setError('Erro ao carregar clientes.');
                 setLoading(false);
             }
-          
+        
         };
         
         fetchClients();
@@ -52,8 +52,8 @@ export default function ListClients() {
     const handleDeleteConfirm = async () => {
         
         try {
-            await axios.post(`http://localhost:3000/api/client/delete`, {
-                data: { id: selectedClient.id }
+            await axios.post(`http://localhost:3000/api/client/deleteRegister`, {
+                id: selectedClient.id
             });
             setClients(clients.filter(client => client.id !== selectedClient.id));
             setShowDeleteModal(false);
@@ -69,7 +69,9 @@ export default function ListClients() {
     if (error) {
         return <div>{error}</div>;
     }
-
+    if (clients.length == 0){
+        return <div>Não há clientes cadastrados...</div>
+    }
     return (
         <div className="flex justify-center w-full">
             <div className="w-full max-w-4xl">

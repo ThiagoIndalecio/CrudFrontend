@@ -38,7 +38,7 @@ const router = createBrowserRouter([
           }
         ]
         
-      },
+      }, 
       {
         path: "users",
         children:[
@@ -54,14 +54,12 @@ const router = createBrowserRouter([
             path:"alterar",
             element: <UpdateUsers />
           }
-
-
         ]
-
       }
+      
     ]
     
-  } 
+  }
 ])
 
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
-import Modal from './ModalUpdateUser';
+import ModalUpdateClient from './ModalUpdateCliente';
 import DeleteModal from './DeleteModal';
 
 export default function AlterarClient() {
@@ -137,13 +137,13 @@ export default function AlterarClient() {
                 </Formik>
             </div>
             {showModal && (
-                <Modal
+                <ModalUpdateClient
                     initialValues={{
                         cliName: selectedClient?.cli_name || "",
                         cliEmail: selectedClient?.cli_email || "",
                         cliPhone: selectedClient?.cli_phone || "",
                         cliCpf: selectedClient?.cli_cpf || "",
-                        cliStatus: selectedClient?.cli_status || "",
+                        cliStatus: selectedClient?.cli_status,
                     }}
                     closeModal={handleModalClose}
                     clientData={selectedClient}

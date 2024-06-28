@@ -18,7 +18,7 @@ export default function AlterarUser() {
                 { email: values.userEmail });
 
             if (response.data.user) {
-                console.log(response);
+               
                 setUserData(response.data.user);
                 setSearchError("");
             } else {
@@ -52,16 +52,18 @@ export default function AlterarUser() {
 
     const handleDeleteConfirm = async () => {
         try {
-            await axios.post("http://localhost:3000/api/client/delete", {
-                data: { id: userData.id }
+            console.log(userData.id)
+            const response = await axios.post("http://localhost:3000/api/user/delete", {
+                id : userData.id
             });
+            console.log(response)
             setUserData(null);
             setShowDeleteModal(false);
         } catch (error) {
             console.error('Erro ao deletar cliente:', error);
         }
     };
-
+    console.log(selectedUser)
     return (
         <div className="flex justify-center w-full">
             <div className="w-full max-w-4xl">
@@ -137,14 +139,16 @@ export default function AlterarUser() {
                     </Form>
                 </Formik>
             </div>
+            
             {showModal && (
+               
                 <Modal
                     initialValues={{
                         userName: selectedUser?.name || "",
                         userEmail: selectedUser?.email || "",
                         userSenha: selectedUser?.password || "",
-                        userIsAdmin: selectedUser?.is_admin || "",
-                        userStatus: selectedUser?.status || "",
+                        userIsAdmin: selectedUser?.is_admin,
+                        userStatus: selectedUser?.status,
                     }}
                     closeModal={handleModalClose}
                     userData={selectedUser}

@@ -12,12 +12,12 @@ const Modal = ({ closeModal, initialValues, userData }) => {
         userName: yup.string().required("Nome é obrigatório"),
         userEmail: yup.string().email("Insira um e-mail válido").required("E-mail é obrigatório"),
         userSenha: yup.string().min(8, "Senha deve ter no mínimo 8 caracteres").required("Senha é obrigatória"),
-        userIsAdmin: yup.boolean().oneOf([true]),
-        userStatus: yup.boolean().oneOf([true]),
+        
     });
 
     const handleUserUpdate = async (values) => {
         try {
+            console.log(values)
             const result = await axios.post("http://localhost:3000/api/user/update", {
                 id: userData.id,
                 name: values.userName,
@@ -60,7 +60,7 @@ const Modal = ({ closeModal, initialValues, userData }) => {
                             onSubmit={handleUserUpdate}
                         >
                             <Form className="p-2 w-full">
-                                <h1 className="text-3xl font-bold mb-1">Atualizar Cliente</h1>
+                                <h1 className="text-3xl font-bold mb-1">Atualizar Cadastro</h1>
                                 <p className="mb-4 text-gray-500">Insira as informações para atualizar o cadastro!</p>
 
                                 <div className="space-y-4">
